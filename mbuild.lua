@@ -39,6 +39,15 @@ local function md5_file(filename)
   end
 end
 
+local function concat_lists(t1, t2)
+  if #t1 == 0 then return t2 end  -- optimization
+  if #t2 == 0 then return t1 end
+  local t = {}
+  for _,v in ipairs(t1) do t[#t+1] = v end
+  for _,v in ipairs(t2) do t[#t+1] = v end
+  return t
+end
+
 -- Supports __gc metamethods on tables in Lua 5.1.
 local function compat_finalizable(o)
   if _G._VERSION == 'Lua 5.1' then
@@ -83,6 +92,9 @@ function Builder:check_deps(cmd, outputs)
     local hash = md5_file(item)
     if hash ~= last_hash then return false end
   end
+  
+  -- Fail if no info known.
+  if not next(self.deps[cmd] or {}) then return false end
 
   return true -- pass
 end
@@ -95,9 +107,18 @@ function Builder:update_deps(cmd, outputs, inputs)
   self.deps[cmd] = dep
 end
 
-function Builder:run(cmd, outputs, inputs)
+function Builder:run(cmd, outputs, inputs, exec)
+  outputs = outputs or {}
+  inputs = inputs or {}
   if not self:check_deps(cmd, outputs) then
-    self:execute(cmd)
+    local more_outputs, more_inputs = {},{}
+    if exec then
+      more_outputs, more_inputs = exec(cmd)
+    else
+      self:execute(cmd)
+    end
+    local outputs = concat_lists(outputs, more_outputs)
+    local inputs = concat_lists(inputs, more_inputs)
     self:update_deps(cmd, outputs, inputs)
   end
 end

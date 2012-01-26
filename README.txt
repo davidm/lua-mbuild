@@ -11,11 +11,11 @@ STATUS
 
   This implementation is an initial proof of concept of creating a
   memoized build system in Lua.  Perhaps it's usable as is, but the
-  code will likely need to be expanded for practical use.
+  code will likely need to be expanded in practice.
   
 USAGE
 
-  Create a Lua file like this and run it:
+  A very basic usage is as follows.  Create a Lua file like this and run it:
   
     local MB = require 'mbuild'
     MB.run('gcc -c t1.c', {'t1.o'}, {'t1.c', 't1.h', 't2.h'})
@@ -24,11 +24,11 @@ USAGE
 
   This will compile files "t1.c" and "t2.c" and then link them into a program "t".
   Inputs and outputs must be listed explicitly (although there are ways to
-  avoid this as discussed later below).
+  implicitly infer them as discussed later below).
   
   If you rerun program, nothing will happen.  If you edit a dependency and rerun the
   program, the necessary files will be rebuilt.  Checksums will be stored in a temporary
-  file called ".deps" (like in fabricate).
+  file called ".deps" (like in fabricate [1]).
   
   You could write wrapper commands that avoid the duplication, like perhaps
   
@@ -54,18 +54,38 @@ USAGE
   
   Implicit dependencies
   
-    Some memoized builds systems support "strace" (on Linux) to automatically
-    determine dependencies.  This could be implemented here as well but is
-    not currently done.
-    
-    Some memoized build system also invoke "gcc -M" (e.g. [6]) to determine
-    dependencies.  An external module is provided for doing this:
+    Some memoized build systems can invoke "gcc -M" or "gcc -MM"
+    to determine dependencies (e.g. [6]).
+    An external module is provided for doing this:
 
-    local MB = require 'mbuild'
-    local gcc_deps = require 'mbuild_gcc'.gcc_deps
-    MB.run('gcc -c t1.c', {'t1.o'}, {'t1.c', defer=gcc_deps})
-    MB.run('gcc -c t2.c', {'t2.c'}, {'t2.c', defer=gcc_deps})
-    MB.run('gcc -o t1 t1.c t2.c', {'t1'}, {'t1.o', 't2.o'})
+      local gcc_deps = require 'mbuild_gcc'.gcc_deps
+      MB.run('gcc -c t1.c', {'t1.o'}, {'t1.c', defer=gcc_deps})
+      MB.run('gcc -c t2.c', {'t2.c'}, {'t2.c', defer=gcc_deps})
+      MB.run('gcc -o t1 t1.c t2.c', {'t1'}, {'t1.o', 't2.o'})
+  
+    Some memoized builds systems support "strace" (a Linux/*nix command
+    not available on Windows) to automatically determine files read and
+    written by commands executed. There is a preliminary implementation
+    of this via the "mbuild_strace" module:
+
+      local strace = require 'mbuild_strace'
+      MB.run('gcc -c t1.c', nil, nil, strace.exec)
+      MB.run('gcc -c t2.c', nil, nil, strace.exec)
+      MB.run('gcc -o t1 t1.o t2.o', nil, nil, strace.exec)
+      
+    The strace.exec will build outputs and dependencies based on the
+    system calls observed when running the commands.
+    
+    You can check what dependencies are being inferred by
+    examining the ".deps" file that mbuild creates:
+    
+     ["gcc -c t1.c"]={
+      ["/lib/i386-linux-gnu/libc.so.6"]="fae28f0c80586f2b712b191d82a51cbd",
+      ["/lib/i386-linux-gnu/libdl.so.2"]="6e2aaea7226f46f38ab50432afd4245d",
+      ["t1.c"]="38c4ebbcd1f502ed3f87ae5ec7e6b95b",
+      ["t1.h"]="d784fa8b6d98d27699781bd9a7cf19f0",
+      . . .
+     }
 
   Change detection
   
@@ -111,8 +131,8 @@ DESIGN NOTES
   support toolchain specific convenience modules like the provided
   mbuild_gcc.lua.  Higher level build rules could be added that abstract
   away the user's toolchain specific code.  This implementation is also
-  cross-platform.  (If strace support is added, then that will require
-  Linux, but it will remain optional.)
+  cross-platform.  (The optional strace support requires
+  a Linux/*nix compatible OS.)
 
 REFERENCES
 
@@ -127,6 +147,7 @@ REFERENCES
   [5] wonderbuild - http://retropaganda.info/~bohan/work/psycle/branches/bohan/wonderbuild/wonderbuild/ ;
         http://psycle.svn.sourceforge.net/viewvc/psycle/branches/bohan/wonderbuild/benchmarks/time.xml
   [6] http://code.google.com/p/fabricate/wiki/HowtoMakeYourOwnRunner
+  [7] http://en.wikipedia.org/wiki/Strace
 	
 COPYRIGHT
 

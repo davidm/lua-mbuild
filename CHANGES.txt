@@ -1,0 +1,3 @@
+2012-01-25 - added initial strace support
+
+2012-01-21 - initial implementation
