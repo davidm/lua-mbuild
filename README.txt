@@ -22,13 +22,13 @@ USAGE
     MB.run('gcc -c t2.c', {'t2.o'}, {'t2.c', 't2.h'})
     MB.run('gcc -o t t1.c t2.c', {'t'}, {'t1.o', 't2.o'})
 
-  This will compile files "t1.c" and "t2.c" and then link them into a program "t".
-  Inputs and outputs must be listed explicitly (although there are ways to
-  implicitly infer them as discussed later below).
+  This will compile files "t1.c" and "t2.c" and then link them into a program
+  "t".  Inputs and outputs must be listed explicitly (although there are ways
+  to implicitly infer them as discussed later below).
   
-  If you rerun program, nothing will happen.  If you edit a dependency and rerun the
-  program, the necessary files will be rebuilt.  Checksums will be stored in a temporary
-  file called ".deps" (like in fabricate [1]).
+  If you rerun the program, nothing will happen.  If you edit a dependency and
+  rerun the program, the necessary files will be rebuilt.  Checksums will be
+  stored in a temporary file called ".deps" (like in fabricate [1]).
   
   You could write wrapper commands that avoid the duplication, like perhaps
   
@@ -109,17 +109,19 @@ EXAMPLES
     
 INSTALLATION / DEPENDENCIES
 
-  Download mbuild.lua and dependencies (file_slurp.lua, compat_load, and DataDumper).
+  Download mbuild.lua and dependencies (file_slurp.lua, compat_load, and
+  DataDumper).
   
     Download all mbuild*.lua files from github.com/davidm/lua-mbuild
     wget https://raw.github.com/gist/1325400/file_slurp.lua
-    wget https://raw.github.com/gist/1654007/compat_load.lua  # omit if using Lua 5.2
+    wget https://raw.github.com/gist/1654007/compat_load.lua  # omit in Lua5.2
     wget https://raw.github.com/gist/1255382/DataDumper.lua
     
   Put these in your LUA_PATH.
     
-  Either the "md5" module <http://www.keplerproject.org/md5/manual.html> or the system
-  "md5sum" command will be used.  The later is used if the former is not installed.
+  Either the "md5" module <http://www.keplerproject.org/md5/manual.html> or
+  the system "md5sum" command will be used.  The later is used if the former
+  is not installed.
 
 RELATED WORK
 
@@ -144,7 +146,8 @@ REFERENCES
   [3] fbuild - https://github.com/felix-lang/fbuild
         (by Erick Tryzelaar, author of felix-lang)
   [4] mem - http://srp.github.com/mem/getting-started.html
-  [5] wonderbuild - http://retropaganda.info/~bohan/work/psycle/branches/bohan/wonderbuild/wonderbuild/ ;
+  [5] wonderbuild -
+        http://retropaganda.info/~bohan/work/psycle/branches/bohan/wonderbuild/wonderbuild/ ;
         http://psycle.svn.sourceforge.net/viewvc/psycle/branches/bohan/wonderbuild/benchmarks/time.xml
   [6] http://code.google.com/p/fabricate/wiki/HowtoMakeYourOwnRunner
   [7] http://en.wikipedia.org/wiki/Strace

@@ -1,6 +1,8 @@
 --[[
-  List implementation.
-  With Perl-like `qw` operator.
+List implementation.
+With Perl-like `qw` operator.
+
+(c) 2012 David Manura.  See README for details.
 --]]
 
 local M = {}

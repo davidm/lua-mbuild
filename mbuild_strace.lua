@@ -10,7 +10,7 @@ Warning: this is very preliminary.
 [1] http://en.wikipedia.org/wiki/Strace
 [2] http://code.google.com/p/fabricate/
  
-D.Manura, 2012
+(c) 2012 David Manura.  See README for details.
 --]]
 
 local M = {}

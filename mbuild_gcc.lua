@@ -1,7 +1,9 @@
 --[[
-  gcc support.
+gcc support.
   
-  Note: could use either gcc -MM or gcc -M
+Note: could use either gcc -MM or gcc -M
+  
+(c) 2012 David Manura.  See README for details.
 --]]
 
 local M = {}
