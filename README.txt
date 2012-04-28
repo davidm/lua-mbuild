@@ -109,13 +109,12 @@ EXAMPLES
     
 INSTALLATION / DEPENDENCIES
 
-  Download mbuild.lua and dependencies (file_slurp.lua, compat_load, and
-  DataDumper).
+  Download mbuild.lua and dependencies (file_slurp.lua [8] and compat_env [9]).
   
-    Download all mbuild*.lua files from github.com/davidm/lua-mbuild
-    wget https://raw.github.com/gist/1325400/file_slurp.lua
-    wget https://raw.github.com/gist/1654007/compat_load.lua  # omit in Lua5.2
-    wget https://raw.github.com/gist/1255382/DataDumper.lua
+    Download all mbuild*.lua files from http://github.com/davidm/lua-mbuild
+    wget https://raw.github.com/davidm/lua-file-slurp/master/lua/file_slurp.lua
+    wget https://raw.github.com/davidm/lua-compat-env/master/lua/compat_env.lua
+         # (omit compat_env in Lua5.2)
     
   Put these in your LUA_PATH.
     
@@ -151,6 +150,8 @@ REFERENCES
         http://psycle.svn.sourceforge.net/viewvc/psycle/branches/bohan/wonderbuild/benchmarks/time.xml
   [6] http://code.google.com/p/fabricate/wiki/HowtoMakeYourOwnRunner
   [7] http://en.wikipedia.org/wiki/Strace
+  [8] https://github.com/davidm/lua-file-slurp/
+  [9] https://github.com/davidm/lua-compat-env/
 	
 COPYRIGHT
 

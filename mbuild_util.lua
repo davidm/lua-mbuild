@@ -7,18 +7,30 @@
 local M = {}
 
 local FS = require 'file_slurp' -- https://gist.github.com/1325400
-local loadfile = (pcall(load,'') and _G or require 'compat_load').loadfile -- https://gist.github.com/1654007
+local loadfile = (pcall(load,'') and _G or require 'compat_env').loadfile -- https://gist.github.com/1654007
 
 -- Simple table serialize and unserialize from file.
-require "DataDumper"
-local DataDumper = _G.DataDumper  --  D:<
+local function dump_string(o, space)
+  space = space or ''
+  if type(o) == 'string' then
+    return ("%q"):format(o)
+  elseif type(o) ~= 'table' then
+    return tostring(o)
+  else
+    local ts = {}
+    for k,v in pairs(o) do
+      ts[#ts+1] = space..'  ['..dump_string(k)..'] = '..dump_string(v, space..'  ')..';\n'
+    end
+    return '{\n'..table.concat(ts)..space..'}'
+  end
+end
 function M.load_table(filename)
   local f, err = loadfile(filename, 't', {}); if not f then return f, err end
   local t = f()
   return t
 end
 function M.save_table(filename, t, flags)
-  FS.writefile(filename, DataDumper(t), flags)
+  FS.writefile(filename, 'return '..dump_string(t)..'\n', flags)
 end
 
 -- MD5 file checksum support.

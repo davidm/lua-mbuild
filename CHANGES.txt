@@ -1,3 +1,5 @@
+2012-04-28 - fixed links to dependent modules.
+
 2012-01-25 - added initial strace support
 
 2012-01-21 - initial implementation
