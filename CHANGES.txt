@@ -1,4 +1,6 @@
-2012-04-28 - fixed links to dependent modules.
+2012-04-28
+  - Fixed links to dependent modules.
+  - Lua 5.2 compatibility.
 
 2012-01-25 - added initial strace support
 

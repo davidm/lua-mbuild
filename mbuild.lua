@@ -8,6 +8,17 @@ local M = {_TYPE='module', _NAME='mbuild', _VERSION='0.1.20120125'}
 
 local UTIL = require 'mbuild_util'
 
+-- os.execute like function, with partial Lua 5.1/5.2 compatiblity.
+local function execute(cmd)
+  local result, err, code = os.execute(cmd)
+  if type(result) == 'number' then  -- Lua 5.1
+    return (result == 0 or nil), 'exit', result
+  else
+    return result, err, code
+  end
+end
+
+
 -- The Builder class.
 local Builder = {}; Builder.__index = Builder
 
@@ -27,8 +38,8 @@ end
 
 function Builder:execute(cmd)
   io.stdout:write(': ', cmd, '\n')
-  local result = os.execute(cmd)
-  assert(result == 0, cmd)
+  local result, err, code = execute(cmd)
+  assert(result, 'failed: cmd='..('%q'):format(cmd)..' [code='..code..']')
 end
 
 function Builder:check_deps(cmd, outputs)

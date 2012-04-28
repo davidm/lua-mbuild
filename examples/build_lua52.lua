@@ -17,7 +17,7 @@ local LIB_O = qw[[
 local BASE_O = CORE_O + LIB_O + qw'lua.c'
 
 for obj in (BASE_O + qw'lua.o luac.o'):iter() do
-  local src = obj:gsub('%.o$', '%.c')
+  local src = obj:gsub('%.o$', '.c')
   MB.run('gcc -c '..src, {obj}, {src, defer=gcc_deps})
 end
 MB.run('ar rcu liblua.a '..BASE_O:string(), {'liblua.a'}, BASE_O)

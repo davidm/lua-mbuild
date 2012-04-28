@@ -106,10 +106,18 @@ USAGE
 EXAMPLES
 
   examples/build_lua.lua is an example of building Lua 5.2.
-    
+
+DEPENDENCES
+
+  Lua 5.1 or 5.2
+  Lua modules:
+    file_slurp [8]
+    compat_env [9] (required for Lua 5.1 only) 
+    md5 [10] (optional if md5sum command available, but recommended for speed)
+
 INSTALLATION / DEPENDENCIES
 
-  Download mbuild.lua and dependencies (file_slurp.lua [8] and compat_env [9]).
+  Download files and dependencies:
   
     Download all mbuild*.lua files from http://github.com/davidm/lua-mbuild
     wget https://raw.github.com/davidm/lua-file-slurp/master/lua/file_slurp.lua
@@ -118,9 +126,8 @@ INSTALLATION / DEPENDENCIES
     
   Put these in your LUA_PATH.
     
-  Either the "md5" module <http://www.keplerproject.org/md5/manual.html> or
-  the system "md5sum" command will be used.  The later is used if the former
-  is not installed.
+  Either the "md5" module [10] or the system "md5sum" command will be used.
+  The later is used if the former is not installed.
 
 RELATED WORK
 
@@ -152,6 +159,7 @@ REFERENCES
   [7] http://en.wikipedia.org/wiki/Strace
   [8] https://github.com/davidm/lua-file-slurp/
   [9] https://github.com/davidm/lua-compat-env/
+  [10] http://www.keplerproject.org/md5/
 	
 COPYRIGHT
 
